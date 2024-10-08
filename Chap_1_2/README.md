@@ -43,4 +43,5 @@ Three different types of machine learning:
  - generalization error
 # Chapter 2 Simple ML algorithm for classification
 * An object-oriented Perceptron API
- - Weight, updated by $\delta_{j} = \eta (target-y_{j} - predicted-\hat{y}_{j})x_{j}$
+ - Weight, updated by $\delta w_{j} = \eta (y_{j} - \hat{y}_{j})x_{j}$
+$$ \eta\delta $$
