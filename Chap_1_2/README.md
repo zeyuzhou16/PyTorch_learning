@@ -41,3 +41,6 @@ Three different types of machine learning:
  - hyperparameters
 * Evaluating models and predicting unseen data instances
  - generalization error
+# Chapter 2 Simple ML algorithm for classification
+* An object-oriented Perceptron API
+ - Weight, updated by $\delta_{j} = \eta (target-y_{j} - predicted-\hat{y}_{j})x_{j}$
