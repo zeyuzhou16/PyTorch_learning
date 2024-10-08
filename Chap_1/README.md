@@ -1,8 +1,8 @@
 Three different types of machine learning:
 # Supervised learning
-  *labeled data
-  *Direct feedback
-  *Predict Outcome/future
+  *labeled data 
+  *Direct feedback 
+  *Predict Outcome/future 
 
 ## Classification for predicting class labels
 
