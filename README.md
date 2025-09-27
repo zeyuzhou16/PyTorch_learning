@@ -3,18 +3,19 @@ Learning PyTorch and related Data science projects
 
 
 A. Preprocessing:
+
     1.  a. from sklearn.preprocessing import StandardScaler
             sc = StandardScaler()
             x_train_std = sc.fit_transform(x_train)
         b. from sklearn.preprocessing import MinMaxScaler
             mms = MinMaxScaler()
             x_train_norm = sc.fit_transform(x_train)
-    2a. from sklearn.impute import SimpleImputer
-        imr = SimpleImputer(missing_values = np.nan, strategy = 'mean/median/most_frequent/constant', fill_value = 0, copy = True)
-        x_train_std = imr.fit_transform(x_train)
-    2b. from sklearn.impute import KNNImputer
-        imputer = KNNImputer(n_neighbors = 3, weights = 'uniform/distance', metric = 'nan_euclidean', copy = False)
-        imputer.fit_transform(x_train)
+    2.  a. from sklearn.impute import SimpleImputer
+            imr = SimpleImputer(missing_values = np.nan, strategy = 'mean/median/most_frequent/constant', fill_value = 0, copy = True)
+            x_train_std = imr.fit_transform(x_train)
+    2.  b. from sklearn.impute import KNNImputer
+            imputer = KNNImputer(n_neighbors = 3, weights = 'uniform/distance', metric = 'nan_euclidean', copy = False)
+            imputer.fit_transform(x_train)
     3. Encoding class labels
         3a. pd.DataSeries.map(dict or lambda func)
         3b. from sklearning preprocessing import LabelEncoder
@@ -34,6 +35,7 @@ A. Preprocessing:
         3d. pd.get_dummies(df[['price', 'color', 'size]], drop_first = True)    
 
 B. Classifiers:
+
     Linear Classifiers:
     1. from sklearn.linear_model import Perception
     ppn = Perceptron(eta0 = 0.1, random_state = 1)
@@ -70,21 +72,23 @@ B. Classifiers:
     y_pred = ppn.predict(x_test_std)
 
 C. Scores:
+
     from sklearn.metrics import accuracy_score
     accuracy_score(y_test, y_pred)
 
     ppn.score(x_test_std, y_test)
 
 D. Feature Selections:
+
     1. forest.fit(X_train, y_train)
         importances = forest.feature_importances_
         indices = np.argsort(importances)[::-1] (descending)
-
     2. from sklearn.feature_selection import SelectFromModel
         sfm = SelecFromModel(forest, threshold = 0.1, predit = True)
         X_selected = sfm.transform(X_train)
 
 E. Dimension Reduction:
+
     1. Unsupervised data compression: principal component analysis
         from sklearn.decomposition import PCA
         pca = PCA(n_components = 2)
@@ -99,6 +103,7 @@ E. Dimension Reduction:
         X_train_tsne = tsne.fit_transform(X_train)
 
 F. Pipeline, Cross Validation and confusion matrix:
+
     1. from sklearn.pipeline import make_pipeline
         pipe_lr = make_pipeline(sc, pca, lr)
         pipe_lr.fit(X_train, y_train)
