@@ -351,4 +351,34 @@ When the dataset is imbalanced (e.g., 90% of data in one class), accuracy is not
 
 ---
 
+## H. Ensemble Learning
+
+When the dataset is imbalanced (e.g., 90% of data in one class), accuracy is not a sufficient metric. Consider:
+1. **Weak learners**
+    All methods below use weak learners (base estimators) as the primary parameter.
+2. **Majority Vote:**  
+    Train several different models and collect the most popular prediction (weighted) as the final prediction.
+
+3. **Bagging:**  
+    Bootstrap + aggregating (Majority Vote + Bootstrap)
+    Characters: Parallel training, Homogeneous learners, random sampling with replacement, reduce variance, majority voting/averaging
+    ```python
+    from sklearn.ensemble import BaggingClassifier
+    bagging_model = BaggingClassifier(estimator = DecisionTreeClassifier(max_depth=2, max_features=1), n_estimators=10, random_state=42)
+    ```
+4. **Boosting:**
+    Characters: Sequential training, Homogeneous learners, sampling/subset not required, reduce bias, weighted voting/averaging
+    ```python
+    from sklearn.ensemble import AdaBoostClassifier
+    boosting_model = AdaBoostClassifier(estimator = DecisionTreeClassifier(max_depth=1), n_estimators=100, random_state=42, algorithm = 'SAMME')
+    ```
+5. **Stacking:**
+    Characters: Sequential training, can be heterogeneous learners, sampling/subset not required, reduce bias/variance, a finalizing meta model
+    ```python
+    from sklearn.ensemble import StackingClassifier
+    stacking_model = StackingClassifier(estimators = [('decision_tree', DecisionTreeClassifier(max_depth=1)), ('lr', LogisticRegression())], final_estimator=SVC(probability=True, random_state=42), cv=5)
+    ```
+
+---
+
 *End of README*
