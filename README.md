@@ -324,6 +324,21 @@ Confusion matrix and other metrics:
 - **F1 Score:** 2 * PRE * REC / (PRE + REC)
 - **Matthews Correlation Coefficient (MCC):** (TP * TN - FP * FN) / sqrt{(TP + FP)(TN + FP)(TP + FN)(TN + FN)}
 
+Regression Errors:
+- **Mean Squared Error (MSE):**  sklearn.metrics.mean_squared_error
+    ```python
+    np.average((data - np.average(data))**2)
+    ```
+- **Mean Absolute Error (MAE):** sklearn.metrics.mean_absolute_error
+    ```python
+    np.average(np.abs(data - np.average(data)))
+    ```
+- **Median Absolute Deviation (MAD):** sklearn.metrics.median_absolute_error
+    ```python
+    np.median(np.abs(data - np.median(data)))
+    ```
+- **R^{2} score:** sklearn.metrics.r2_score
+
 ```python
 from sklearn.metrics import confusion_matrix, precision_score, recall_score, f1_score, matthews_corrcoef, make_scorer
 
@@ -353,7 +368,6 @@ When the dataset is imbalanced (e.g., 90% of data in one class), accuracy is not
 
 ## H. Ensemble Learning
 
-When the dataset is imbalanced (e.g., 90% of data in one class), accuracy is not a sufficient metric. Consider:
 1. **Weak learners**
     All methods below use weak learners (base estimators) as the primary parameter.
 2. **Majority Vote:**  
@@ -379,6 +393,79 @@ When the dataset is imbalanced (e.g., 90% of data in one class), accuracy is not
     stacking_model = StackingClassifier(estimators = [('decision_tree', DecisionTreeClassifier(max_depth=1)), ('lr', LogisticRegression())], final_estimator=SVC(probability=True, random_state=42), cv=5)
     ```
 
+---
+## H. Regression Analysis
+
+Simplest regression model: Linear regression (Correlation analysis-PCA/t-SNE for dimension reduction)
+                            Decision tree models (Almost like step functions)
+1. **Correlation matrix**
+    ```python
+    cm = df.corr().values
+    hm = sns.heatmap(cm, annot=True, cmap='viridis', fmt=".2f", linewidths=.5
+                 , yticklabels=df.columns, xticklabels=df.columns)
+    ```
+2. **Linear Regression:**  
+    ```python
+    from sklearn.linear_model import LinearRegression
+    slr = LinearRegression()
+    # Below is simple LR
+    class simple_LinearRegression:
+    def __init__(self):
+        self.coef_ = None
+        self.intercept_ = None
+
+    def fit(self, X, y):
+        X_b = np.c_[np.ones(X.shape[0]), X]
+        theta_best = np.linalg.inv(X_b.T.dot(X_b)).dot(X_b.T).dot(y) # (X^{T} * X)^(-1) * X^{T} * y
+        self.intercept_ = theta_best[0]
+        self.coef_ = theta_best[1:]
+
+    def predict(self, X):
+        if self.coef_ is None or self.intercept_ is None:
+            raise Exception("Model is not fitted yet.")
+        X_b = np.c_[np.ones(X.shape[0]), X]
+
+        return X_b.dot(np.r_[self.intercept_, self.coef_])
+    ```
+
+3. **RANSAC:**  
+    Linear regression on a subset of inliers (remove outliers)
+    Characters: Parallel training, Homogeneous learners, random sampling with replacement, reduce variance, majority voting/averaging
+    ```python
+    from sklearn.linear_model import LinearRegression, RANSACRegressor
+    ransac = RANSACRegressor(LinearRegression(), min_samples=0.95, residual_threshold=None, random_state=123)
+    ransac.fit(X_train, y_train)
+    inlier_mask = ransac.inlier_mask_
+    outlier_mask = np.logical_not(inlier_mask)
+    ```
+4. **Regularized Linear Regression:**
+    Ridge (L2), Lasso (L1), ElasticNet(L2: alpha, L1: l1_ratio)
+
+    ```python
+    from sklearn.linear_model import Ridge, Lasso, ElasticNet
+    ridge = Ridge(alpha=1.0)
+    lasso = Lasso(alpha=1.0)
+    elanet = ElasticNet(alpha=1.0, l1_ratio=0.5)
+    ```
+5. **Polynomial regression:**
+    Transform X to X^{d}, and then perform linear regression on X^{d} vs y
+    ```python
+    from sklearn.preprocessing import PolynomialFeatures
+    quadratic = PolynomialFeatures(degree=2)
+    X_quad = quadratic.fit_transform(X)
+    ```
+6. **Decision tree regression:**
+    Simple decision tree as 2^{max_depth}. No continuity or differentiability.
+    ```python
+    from sklearn.tree import DecisionTreeRegressor
+    tree = DecisionTreeRegressor(max_depth=3) 
+    ```
+7. **Random Forest regression:**
+    Bagging (bootstrap aggregation)
+    ```python
+    from sklearn.ensemble import RandomForestRegressor
+    rfr = RandomForestRegressor(n_estimators=500, criterion='squared_error', n_jobs=-1) 
+    ```
 ---
 
 *End of README*
