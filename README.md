@@ -466,6 +466,50 @@ Simplest regression model: Linear regression (Correlation analysis-PCA/t-SNE for
     from sklearn.ensemble import RandomForestRegressor
     rfr = RandomForestRegressor(n_estimators=500, criterion='squared_error', n_jobs=-1) 
     ```
+
+---
+## I. Clustering Analysis
+
+Clustering analysi
+1. **KMeans**
+    k as the parameter to be determined by elbow method
+    Randomly pick k centroids; Classify all datapoints to one of the k centroids; Calculate the centroid of k classes and the Sum of Squared Errors (SSE); Repeat until SSE converges.
+
+2. **Silhouette coefficient**
+    cluster cohesion {a_{i}}: Average distance between one point and all other points within the same cluster (<(x^{i}_{r} - x^{i}_{s})^2>_{r\neq s})
+    cluster separation {b_{i}}: Average distance between one point and all points from its next closest cluster.
+    Silhouette coefficient: {s_{i}} = \frac{b_{i}-a_{i}}{max(b_{i}, a_{i})} (-1 to 1)
+    ```python
+    from sklearn.datasets import make_blobs
+    from sklearn.metrics import silhouette_samples
+    from sklearn.cluster import KMeans
+    X, y = make_blobs
+    km = KMeans(n_clusters = 2, random_state = 2)
+    ssc = silhouette_score(X, km.fit_predict(X))
+    ```
+
+3. **Distance Matrix**
+    ```python
+    from scipy.cluster.hierarchy import linkage, dendrogram
+    row_clusters = linkage(df.values, method='complete', metric='euclidean')
+    row_dendr = dendrogram(row_clusters, labels = df.index)
+    ```
+
+4. **DBSCAN: density-based spatial clustering of applications with noise**
+    Core points, border points and noise points.
+    Not spherical shape
+    ```python
+    from sklearn.datasets import make_moons
+    from scipy.cluster import DBSCAN
+    X, y = make_moons(n_samples=200, noise = 0.05, random_state = 0)
+    db = DBSCAN(eps=0.2, min_samples=5, metric='euclidean')
+    y_db = db.fit_predict(X)
+    ```
+5. **Plots**
+    Scatter plots with various types/colors of markers.
+    ```python
+    plt.scatter(X[y_db == 0, 0], X[y_db == 0, 1], c='lightblue', edgecolor='black', marker='o', s=40, label='cluster 1')
+    ```
 ---
 
 *End of README*
